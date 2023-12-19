@@ -11,11 +11,13 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Contact from './Contact.vue'
 import CustomHeader from './CustomHeader.vue'
+import useModal from '../../hooks/useModal'
 
 export default {
   components: { Contact, CustomHeader },
   setup () {
     const router = useRouter()
+    const modal = useModal()
 
     onMounted(() => {
       const token = window.localStorage.getItem('token')
@@ -25,11 +27,15 @@ export default {
     })
 
     function handleLogin () {
-
+      modal.open({
+        components: 'modalLogin'
+      })
     }
 
     function handleSignup () {
-
+      modal.open({
+        components: 'modalSignup'
+      })
     }
 
     return {

@@ -1,9 +1,12 @@
 <template>
+  <modal-factory />
   <router-view />
 </template>
 
 <script>
-export default {
+import modalFactory from './components/modalFactory'
 
+export default {
+  components: { modalFactory }
 }
 </script>
