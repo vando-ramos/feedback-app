@@ -34,7 +34,8 @@
       <button :disabled="state.isLoading" type="submit" :class="{'opacity-50': state.isLoading}"
         class="px-8 py-3 mt-10 text-2xl font-bold text-white rounded-full bg-brand-main focus:outline-none transition-all duration-150"
       >
-        Log in
+        <icon v-if="state.isLoading" name='loading' class="animate-spin" />
+        <span v-else>Log in</span>
       </button>
     </form>
   </div>
@@ -46,10 +47,12 @@ import { useRouter } from 'vue-router'
 import { useField } from 'vee-validate'
 import { useToast } from 'vue-toastification'
 import useModal from '../../hooks/useModal'
+import icon from '../icon'
 import { validateEmptyAndLength3, validateEmptyAndEmail } from '../../utils/validators'
 import services from '../../services'
 
 export default {
+  components: { icon },
   setup () {
     const router = useRouter()
     const modal = useModal()
@@ -90,7 +93,8 @@ export default {
         if (!errors) {
           window.localStorage.setItem('token', data.token)
           state.isLoading = false
-          router.push({ name: 'Feedbacks' })
+          router.push({ name: 'feedbacks' })
+          state.isLoading = false
           modal.close()
           return
         }
@@ -98,9 +102,11 @@ export default {
         if (errors.status === 404) {
           toast.error('Email not found!')
         }
+
         if (errors.status === 401) {
           toast.error('Invalid email or password!')
         }
+
         if (errors.status === 400) {
           toast.error('Login error!')
         }
