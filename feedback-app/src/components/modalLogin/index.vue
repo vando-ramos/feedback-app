@@ -21,10 +21,10 @@
         </span>
       </label>
 
-      <label class="block">
+      <label class="block mt-9">
         <span class="text-lg font-medium text-gray-800">Password</span>
         <input v-model="state.password.value" type="password" :class="{'border-brand-danger': !!state.email.errorMessage}"
-          class="block w-full px-4 py-3 mt-1 text-lg bg-gray-100 border-2 border-transparent rounded" placeholder=""
+          class="block w-full px-4 py-3 mt-1 text-lg bg-gray-100 border-2 border-transparent rounded" placeholder="Enter Password"
         >
         <span v-if="!!state.password.errorMessage" class="block font-medium text-brand-danger">
           {{ state.password.errorMessage }}
@@ -42,31 +42,44 @@
 
 <script>
 import { reactive } from 'vue'
+import { useField } from 'vee-validate'
 import useModal from '../../hooks/useModal'
+import { validateEmptyAndLength3, validateEmptyAndEmail } from '../../utils/validators'
 
 export default {
   setup () {
     const modal = useModal()
 
+    const {
+      value: emailValue,
+      errorMessage: emailErrorMessage
+    } = useField('email', validateEmptyAndEmail)
+
+    const {
+      value: passwordValue,
+      errorMessage: passwordErrorMessage
+    } = useField('password', validateEmptyAndLength3)
+
     const state = reactive({
       hasErrors: false,
       isLoading: false,
       email: {
-        value: '',
-        errorMessage: ''
+        value: emailValue,
+        errorMessage: emailErrorMessage
       },
       password: {
-        value: '',
-        errorMessage: ''
+        value: passwordValue,
+        errorMessage: passwordErrorMessage
       }
     })
 
-    // function handleSubmit () {
-    // }
+    function handleSubmit () {
+    }
 
     return {
       state,
-      close: modal.close
+      close: modal.close,
+      handleSubmit
     }
   }
 }
